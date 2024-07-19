@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import { hasAccess } from "~/composables/supertab";
 
-const maxMoves = process.env.NODE_ENV === "development" ? 0 : 369;
+const maxMoves = process.env.NODE_ENV === "development" ? 0 : 1369;
 
 useHead({
   title: "2048: Cyber Fusion Edition",
