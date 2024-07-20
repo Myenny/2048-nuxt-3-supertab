@@ -1,0 +1,24 @@
+[build]
+  command = "npm run build"
+  publish = "build"
+
+[build.environment]
+  PRISMA_CLIENT_ENGINE_TYPE = "binary"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-install-node-modules"
+
+[functions]
+  node_bundler = "esbuild"
+
+[functions.build]
+  included_files = ["./prisma/schema.prisma"]
+
+[context.production.environment]
+  DATABASE_URL = "your-database-url"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-install-node-modules"
+
+[build.lifecycle.onBuild]
+  command = "prisma generate"
