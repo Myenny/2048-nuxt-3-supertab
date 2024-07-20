@@ -17,8 +17,5 @@
 [context.production.environment]
   DATABASE_URL = "your-database-url"
 
-[[plugins]]
-  package = "@netlify/plugin-functions-install-node-modules"
-
 [build.lifecycle.onBuild]
   command = "prisma generate"
