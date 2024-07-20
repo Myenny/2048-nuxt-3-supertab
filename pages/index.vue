@@ -1,19 +1,24 @@
 <template>
-  <div class="container mx-auto max-w-md space-y-4 py-4">
+  <div class="container mx-auto max-w-4xl space-y-4 py-4">
     <aside>
       <AdsBanner1 v-if="!hasAccess" />
     </aside>
-    <main class="sm:py-4 relative">
-      <ClientOnly>
-        <BoardView
-          :max-moves="maxMoves"
-          :pause="showSquareAd && !hasAccess"
-          @max-moves="handleMaxMoves"
-        />
-        <AdsSquare v-if="showSquareAd && !hasAccess" @close="handleAdClose" />
-      </ClientOnly>
-
-      <section class="prose prose-invert prose-p:text-sm py-8">
+    <div class="flex flex-col md:flex-row gap-4">
+      <main class="sm:py-4 relative flex-grow">
+        <ClientOnly>
+          <BoardView
+            :max-moves="maxMoves"
+            :pause="showSquareAd && !hasAccess"
+            @max-moves="handleMaxMoves"
+          />
+          <AdsSquare v-if="showSquareAd && !hasAccess" @close="handleAdClose" />
+        </ClientOnly>
+      </main>
+      <aside class="md:w-64">
+        <Leaderboard />
+      </aside>
+    </div>
+    <section class="prose prose-invert prose-p:text-sm py-8">
         <h2>How to Play 2048</h2>
         <p>
           2048 is a fun puzzle game where the objective is to slide numbered

@@ -9,7 +9,7 @@
       <BoardCell v-for="(c_item, c_i) in r_item" :key="c_i" />
     </div>
     <BoardTileView v-for="(tile, i) in tiles" :tile="tile" :key="i" />
-    <BoardGameEndOverlay :board="board" :onrestart="onRestart" />
+    <BoardGameEndOverlay :board="board" :onrestart="onRestart" :score="board.score" @scoreSubmitted="handleScoreSubmitted" />
   </div>
 </template>
 

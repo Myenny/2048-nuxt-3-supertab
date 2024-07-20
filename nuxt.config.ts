@@ -3,4 +3,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@nuxtjs/tailwindcss", "@vueuse/nuxt", "nuxt-svgo"],
   css: ["@/assets/css/main.css"],
+  serverHandlers: [
+    { route: '/api/leaderboard', handler: '~/server/api/leaderboard.ts' }
+  ],
 });
