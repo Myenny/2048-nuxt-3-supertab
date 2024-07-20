@@ -23,3 +23,8 @@ logs
 .env.*
 !.env.example
 .aider*
+
+# Environment variables
+.env
+.env.*
+!.env.example
