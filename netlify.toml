@@ -1,6 +1,6 @@
 [build]
-  command = "prisma generate && npm run build"
-  publish = "build"
+  command = "npx prisma generate && npm run build"
+  publish = "dist"
 
 [build.environment]
   PRISMA_CLIENT_ENGINE_TYPE = "binary"
