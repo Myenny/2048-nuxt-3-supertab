@@ -48,10 +48,6 @@
           achieve even higher scores.
         </p>
       </section>
-    </main>
-    <aside>
-      <AdsBanner1 v-if="!hasAccess" />
-    </aside>
   </div>
 </template>
 
