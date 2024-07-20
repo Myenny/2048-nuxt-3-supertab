@@ -1,0 +1,81 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("SUPABASE_URL")
+  directUrl = env("SUPABASE_KEY")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x", "rhel-openssl-1.0.x"]
+}
+
+model Leaderboard {
+  id         Int      @id @default(autoincrement())
+  playerName String
+  score      Int
+  createdAt  DateTime @default(now())
+}
+
+model User {
+  id               String          @id @default(uuid())
+  battleTag        String          @unique
+  firstLoginDate   DateTime        @default(now())
+  discord          String?
+  email            String?
+  reputation       String?
+  addr             String?
+  addrPrv          String?
+  itemsSold        Int?
+  lastLoggedOn     DateTime?
+  wings            Int?
+  level            Int?
+  points           Int?
+  postedItems      Int?
+  daysActive       Int?
+  banned           Boolean         @default(false)
+  ignoredUsers     String[]
+  messageCount     Int?
+  ItemMessage      ItemMessage[]
+  messagesSent     DirectMessage[] @relation("MessagesSent")
+  messagesReceived DirectMessage[] @relation("MessagesReceived")
+  materialItems    MaterialItem[]
+  services         Service[]
+
+  @@index([battleTag])
+}
+
+model ItemMessage {
+  id        String @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+}
+
+model DirectMessage {
+  id        String @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  senderId  String
+  receiverId String
+  sender    User    @relation("MessagesSent", fields: [senderId], references: [id])
+  receiver  User    @relation("MessagesReceived", fields: [receiverId], references: [id])
+}
+
+model MaterialItem {
+  id        String @id @default(uuid())
+  name      String
+  quantity  Int
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+}
+
+model Service {
+  id        String @id @default(uuid())
+  name      String
+  description String
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+}
