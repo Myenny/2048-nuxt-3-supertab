@@ -3,7 +3,7 @@
     <h2 class="text-2xl font-bold text-white mb-4">Leaderboard</h2>
     <ul class="space-y-2">
       <li v-for="(entry, index) in leaderboard" :key="index" class="flex justify-between items-center text-white">
-        <span class="font-semibold">{{ index + 1 }}. {{ entry.player_name }}</span>
+        <span class="font-semibold">{{ index + 1 }}. {{ entry.playerName }}</span>
         <span>{{ entry.score }}</span>
       </li>
     </ul>
@@ -14,7 +14,7 @@
 import { ref, onMounted } from 'vue'
 
 interface LeaderboardEntry {
-  player_name: string;
+  playerName: string;
   score: number;
 }
 
