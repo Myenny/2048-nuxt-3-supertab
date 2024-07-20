@@ -14,8 +14,5 @@
 [functions.build]
   included_files = ["./prisma/schema.prisma"]
 
-[context.production.environment]
-  DATABASE_URL = "your-database-url"
-
 [build.lifecycle.onBuild]
   command = "prisma generate"
