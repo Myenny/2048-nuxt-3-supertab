@@ -7,6 +7,12 @@
         <span>{{ entry.score }} ({{ formatTime(entry.gameTime) }})</span>
       </li>
     </ul>
+    <form @submit.prevent="submitScore" class="mt-4">
+      <input v-model="newScore.playerName" placeholder="Player Name" class="bg-gray-700 text-white p-2 rounded" required>
+      <input v-model.number="newScore.score" type="number" placeholder="Score" class="bg-gray-700 text-white p-2 rounded ml-2" required>
+      <input v-model.number="newScore.gameTime" type="number" placeholder="Game Time (seconds)" class="bg-gray-700 text-white p-2 rounded ml-2" required>
+      <button type="submit" class="bg-blue-500 text-white p-2 rounded ml-2">Submit Score</button>
+    </form>
   </div>
 </template>
 
@@ -20,6 +26,7 @@ interface LeaderboardEntry {
 }
 
 const leaderboard = ref<LeaderboardEntry[]>([])
+const newScore = ref<LeaderboardEntry>({ playerName: '', score: 0, gameTime: 0 })
 
 const fetchLeaderboard = async () => {
   try {
@@ -31,6 +38,26 @@ const fetchLeaderboard = async () => {
     }
   } catch (error) {
     console.error('Error fetching leaderboard data:', error)
+  }
+}
+
+const submitScore = async () => {
+  try {
+    const response = await fetch('/api/leaderboard', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newScore.value),
+    })
+    if (response.ok) {
+      await fetchLeaderboard()
+      newScore.value = { playerName: '', score: 0, gameTime: 0 }
+    } else {
+      console.error('Failed to submit new score')
+    }
+  } catch (error) {
+    console.error('Error submitting new score:', error)
   }
 }
 
