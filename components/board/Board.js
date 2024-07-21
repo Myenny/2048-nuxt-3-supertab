@@ -218,27 +218,31 @@ Board.prototype.hasLost = function () {
 };
 
 Board.prototype.submitScore = async function (playerName) {
-  try {
-    const response = await fetch('/api/leaderboard', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        playerName: playerName,
-        score: this.score,
-        gameTime: this.timer,
-      }),
-    });
-    if (response.ok) {
-      console.log('Score submitted successfully');
-      // Dispatch a custom event to notify that the leaderboard should be updated
-      window.dispatchEvent(new CustomEvent('leaderboardUpdated'));
-    } else {
-      console.error('Failed to submit score');
+  if (this.hasLost() || this.hasWon()) {
+    try {
+      const response = await fetch('/api/leaderboard', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          playerName: playerName,
+          score: this.score,
+          gameTime: this.timer,
+        }),
+      });
+      if (response.ok) {
+        console.log('Score submitted successfully');
+        // Dispatch a custom event to notify that the leaderboard should be updated
+        window.dispatchEvent(new CustomEvent('leaderboardUpdated'));
+      } else {
+        console.error('Failed to submit score');
+      }
+    } catch (error) {
+      console.error('Error submitting score:', error);
     }
-  } catch (error) {
-    console.error('Error submitting score:', error);
+  } else {
+    console.log('Game is not over yet. Score not submitted.');
   }
 };
 
