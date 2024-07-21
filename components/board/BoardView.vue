@@ -2,14 +2,14 @@
   <BoardScore
     :score="board.score"
     :highScore="highScore"
-    :timer="board.timer"
+    :timer="formatTime(board.timer)"
   />
   <div class="board" tabIndex="1" ref="boardContainer">
     <div v-for="(r_item, r_i) in board.cells" :key="r_i" class="cell-container">
       <BoardCell v-for="(c_item, c_i) in r_item" :key="c_i" />
     </div>
     <BoardTileView v-for="(tile, i) in tiles" :tile="tile" :key="i" />
-    <BoardGameEndOverlay :board="board" :onrestart="onRestart" :score="board.score" @scoreSubmitted="handleScoreSubmitted" />
+    <BoardGameEndOverlay :board="board" :onrestart="onRestart" :score="board.score" />
   </div>
 </template>
 
@@ -21,7 +21,7 @@ import BoardTileView from "./BoardTileView.vue";
 import BoardGameEndOverlay from "./BoardGameEndOverlay.vue";
 import "./style.scss";
 
-const formatTime = (seconds) => {
+const formatTime = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
   return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
