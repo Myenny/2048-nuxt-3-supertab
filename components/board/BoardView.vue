@@ -124,7 +124,30 @@ watch(
   (gameEnded) => {
     if (gameEnded) {
       board.value.stopTimer();
+      submitScore();
     }
   }
 );
+
+const submitScore = async () => {
+  try {
+    const response = await fetch('/api/leaderboard', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        player_name: 'Player', // You might want to get this from user input
+        score: board.value.score,
+        game_time: board.value.timer,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to submit score');
+    }
+    console.log('Score submitted successfully');
+  } catch (error) {
+    console.error('Error submitting score:', error);
+  }
+};
 </script>
