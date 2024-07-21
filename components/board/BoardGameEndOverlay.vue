@@ -71,13 +71,15 @@ const submitScore = async () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        player_name: playerName.value,
+        playerName: playerName.value,
         score: score.value,
+        gameTime: props.board.timer,
       }),
     });
 
     if (response.ok) {
-      emit('scoreSubmitted');
+      const { newEntry, updatedLeaderboard } = await response.json();
+      emit('scoreSubmitted', updatedLeaderboard);
       restart();
     } else {
       console.error('Failed to submit score');
