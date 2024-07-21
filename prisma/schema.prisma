@@ -13,6 +13,7 @@ model Leaderboard {
   id         Int      @id @default(autoincrement())
   playerName String
   score      Int
+  gameTime   Int
   createdAt  DateTime @default(now())
 }
 

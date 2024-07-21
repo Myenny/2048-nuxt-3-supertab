@@ -4,7 +4,7 @@
     <ul class="space-y-2">
       <li v-for="(entry, index) in leaderboard" :key="index" class="flex justify-between items-center text-white">
         <span class="font-semibold">{{ index + 1 }}. {{ entry.playerName }}</span>
-        <span>{{ entry.score }}</span>
+        <span>{{ entry.score }} ({{ formatTime(entry.gameTime) }})</span>
       </li>
     </ul>
   </div>
@@ -16,6 +16,7 @@ import { ref, onMounted } from 'vue'
 interface LeaderboardEntry {
   playerName: string;
   score: number;
+  gameTime: number;
 }
 
 const leaderboard = ref<LeaderboardEntry[]>([])
@@ -32,4 +33,10 @@ onMounted(async () => {
     console.error('Error fetching leaderboard data:', error)
   }
 })
+
+const formatTime = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+};
 </script>
