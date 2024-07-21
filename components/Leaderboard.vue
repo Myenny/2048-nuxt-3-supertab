@@ -7,10 +7,6 @@
         <span>{{ entry.score }} ({{ formatTime(entry.gameTime) }})</span>
       </li>
     </ul>
-    <form @submit.prevent="submitScore" class="space-y-2">
-      <input v-model="playerName" type="text" placeholder="Enter your name" class="w-full p-2 rounded" required>
-      <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Submit Score</button>
-    </form>
   </div>
 </template>
 
@@ -24,7 +20,6 @@ interface LeaderboardEntry {
 }
 
 const leaderboard = ref<LeaderboardEntry[]>([])
-const playerName = ref('')
 
 const fetchLeaderboard = async () => {
   try {
@@ -36,30 +31,6 @@ const fetchLeaderboard = async () => {
     }
   } catch (error) {
     console.error('Error fetching leaderboard data:', error)
-  }
-}
-
-const submitScore = async () => {
-  try {
-    const response = await fetch('/api/leaderboard', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        playerName: playerName.value,
-        score: 0, // Replace with actual score
-        gameTime: 0, // Replace with actual game time
-      }),
-    })
-    if (response.ok) {
-      await fetchLeaderboard()
-      playerName.value = ''
-    } else {
-      console.error('Failed to submit score')
-    }
-  } catch (error) {
-    console.error('Error submitting score:', error)
   }
 }
 
