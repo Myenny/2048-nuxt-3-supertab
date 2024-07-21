@@ -17,7 +17,6 @@
       @leaderboardUpdated="handleLeaderboardUpdated"
     />
   </div>
-  <Leaderboard ref="leaderboardRef" />
 </template>
 
 <script lang="ts" setup>

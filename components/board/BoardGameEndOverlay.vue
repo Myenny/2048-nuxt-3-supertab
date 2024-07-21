@@ -11,11 +11,13 @@
       <button @click="submitScore" class="ml-2 bg-blue-500 text-white p-2 rounded">Submit Score</button>
     </div>
     <button class="tryAgain mt-4" @click="restart">Try again</button>
+    <Leaderboard ref="leaderboardRef" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { toRefs, ref, computed } from "vue";
+import Leaderboard from '../Leaderboard.vue';
 
 const props = defineProps({
   board: {
