@@ -64,6 +64,8 @@ var Board = function () {
   this.tiles = [];
   this.cells = [];
   this.score = 0;
+  this.timer = 0;
+  this.timerInterval = null;
   for (var i = 0; i < Board.size; ++i) {
     this.cells[i] = [
       this.addTile(),
@@ -75,6 +77,26 @@ var Board = function () {
   this.addRandomTile();
   this.setPositions();
   this.won = false;
+};
+
+Board.prototype.startTimer = function () {
+  if (this.timerInterval === null) {
+    this.timerInterval = setInterval(() => {
+      this.timer += 1;
+    }, 1000);
+  }
+};
+
+Board.prototype.stopTimer = function () {
+  if (this.timerInterval !== null) {
+    clearInterval(this.timerInterval);
+    this.timerInterval = null;
+  }
+};
+
+Board.prototype.resetTimer = function () {
+  this.stopTimer();
+  this.timer = 0;
 };
 
 Board.prototype.addTile = function () {

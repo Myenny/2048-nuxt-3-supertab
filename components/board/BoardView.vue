@@ -4,6 +4,7 @@
     :highScore="highScore"
     :attempts="attempts"
   />
+  <div class="timer">Time: {{ formatTime(board.timer) }}</div>
   <div class="board" tabIndex="1" ref="boardContainer">
     <div v-for="(r_item, r_i) in board.cells" :key="r_i" class="cell-container">
       <BoardCell v-for="(c_item, c_i) in r_item" :key="c_i" />
@@ -14,12 +15,18 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onBeforeUnmount, ref, computed } from "vue";
+import { onMounted, onBeforeUnmount, ref, computed, watch } from "vue";
 import { Board } from "./Board";
 import BoardCell from "./BoardCell.vue";
 import BoardTileView from "./BoardTileView.vue";
 import BoardGameEndOverlay from "./BoardGameEndOverlay.vue";
 import "./style.scss";
+
+const formatTime = (seconds) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+};
 
 // 0 -> left, 1 -> up, 2 -> right, 3 -> down
 enum DirectionEnum {
@@ -80,13 +87,17 @@ watch(moveCount, (count) => {
 const onRestart = () => {
   moveCount.value = 0;
   board.value = new Board();
+  board.value.resetTimer();
+  board.value.startTimer();
   increaseAttempts();
 };
 onMounted(() => {
   window.addEventListener("keydown", handleKeyDown);
+  board.value.startTimer();
 });
 onBeforeUnmount(() => {
   window.removeEventListener("keydown", handleKeyDown);
+  board.value.stopTimer();
 });
 const tiles = computed(() => {
   return board.value.tiles.filter((tile) => tile.value != 0);
@@ -112,6 +123,15 @@ watch(
   () => board.value.score,
   (newValue) => {
     updateHighScore(newValue);
+  }
+);
+
+watch(
+  () => board.value.hasWon() || board.value.hasLost(),
+  (gameEnded) => {
+    if (gameEnded) {
+      board.value.stopTimer();
+    }
   }
 );
 </script>
