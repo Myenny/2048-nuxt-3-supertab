@@ -19,12 +19,12 @@ export default defineEventHandler(async (event) => {
     return leaderboard
   } else if (event.req.method === 'POST') {
     // Save a new score
-    const { playerName, score, gameTime } = await readBody(event)
+    const body = await readBody(event)
     const newScore = await prisma.leaderboard.create({
       data: {
-        playerName,
-        score: parseInt(score),
-        gameTime: parseInt(gameTime),
+        playerName: String(body.playerName),
+        score: parseInt(String(body.score)),
+        gameTime: parseInt(String(body.gameTime)),
       },
     })
     
