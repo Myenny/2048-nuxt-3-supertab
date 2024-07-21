@@ -23,8 +23,8 @@ export default defineEventHandler(async (event) => {
     const newScore = await prisma.leaderboard.create({
       data: {
         playerName: player_name,
-        score,
-        gameTime: game_time,
+        score: parseInt(score),
+        gameTime: parseInt(game_time),
       },
     })
     return newScore
