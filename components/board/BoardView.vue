@@ -9,8 +9,15 @@
       <BoardCell v-for="(c_item, c_i) in r_item" :key="c_i" />
     </div>
     <BoardTileView v-for="(tile, i) in tiles" :tile="tile" :key="i" />
-    <BoardGameEndOverlay :board="board" :onrestart="onRestart" :score="board.score" />
+    <BoardGameEndOverlay 
+      :board="board" 
+      :onrestart="onRestart" 
+      :score="board.score" 
+      @scoreSubmitted="handleScoreSubmitted"
+      @leaderboardUpdated="handleLeaderboardUpdated"
+    />
   </div>
+  <Leaderboard ref="leaderboardRef" />
 </template>
 
 <script lang="ts" setup>
@@ -129,6 +136,18 @@ watch(
   }
 );
 
+const leaderboardRef = ref(null);
+
+const handleScoreSubmitted = (updatedLeaderboard) => {
+  console.log('Score submitted successfully');
+};
+
+const handleLeaderboardUpdated = (newLeaderboard) => {
+  if (leaderboardRef.value) {
+    leaderboardRef.value.updateLeaderboard(newLeaderboard);
+  }
+};
+
 const submitScore = async () => {
   try {
     const response = await fetch('/api/leaderboard', {
@@ -137,14 +156,16 @@ const submitScore = async () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        player_name: 'Player', // You might want to get this from user input
+        playerName: 'Player', // You might want to get this from user input
         score: board.value.score,
-        game_time: board.value.timer,
+        gameTime: board.value.timer,
       }),
     });
     if (!response.ok) {
       throw new Error('Failed to submit score');
     }
+    const { updatedLeaderboard } = await response.json();
+    handleLeaderboardUpdated(updatedLeaderboard);
     console.log('Score submitted successfully');
   } catch (error) {
     console.error('Error submitting score:', error);
