@@ -1,3 +1,4 @@
+<!--
 <template>
   <div
     class="fixed h-screen inset-0 flex items-center justify-center bg-black/90 backdrop-blur z-20"
@@ -61,3 +62,4 @@ onBeforeUnmount(() => clearInterval(interval));
 
 defineEmits(["close"]);
 </script>
+-->

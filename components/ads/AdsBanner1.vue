@@ -1,3 +1,4 @@
+<!--
 <template>
   <a
     href="https://codecombat.com/"
@@ -15,3 +16,4 @@
     </div>
   </a>
 </template>
+-->
