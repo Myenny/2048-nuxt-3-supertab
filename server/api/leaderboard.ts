@@ -24,9 +24,9 @@ export default defineEventHandler(async (event) => {
     // Add new score to the leaderboard
     const newEntry = await prisma.leaderboard.create({
       data: {
-        playerName,
-        score,
-        gameTime,
+        playerName: String(playerName),
+        score: Number(score),
+        gameTime: Number(gameTime),
       },
     })
 
