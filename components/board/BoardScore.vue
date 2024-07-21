@@ -1,8 +1,8 @@
 <template>
   <div class="board-score-wrapper">
     <div class="board-score">
-      <h5>Attempts</h5>
-      <p>{{ attempts }}</p>
+      <h5>Timer</h5>
+      <p>{{ timer }}</p>
     </div>
     <div class="board-score bg-orange-900">
       <h5>Score</h5>
@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-defineProps(["score", "highScore", "attempts"]);
+defineProps(["score", "highScore", "timer"]);
 </script>
 
 <style scoped>
