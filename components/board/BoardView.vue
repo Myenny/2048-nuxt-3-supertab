@@ -2,9 +2,8 @@
   <BoardScore
     :score="board.score"
     :highScore="highScore"
-    :attempts="attempts"
+    :timer="board.timer"
   />
-  <div class="timer">Time: {{ formatTime(board.timer) }}</div>
   <div class="board" tabIndex="1" ref="boardContainer">
     <div v-for="(r_item, r_i) in board.cells" :key="r_i" class="cell-container">
       <BoardCell v-for="(c_item, c_i) in r_item" :key="c_i" />
@@ -89,7 +88,6 @@ const onRestart = () => {
   board.value = new Board();
   board.value.resetTimer();
   board.value.startTimer();
-  increaseAttempts();
 };
 onMounted(() => {
   window.addEventListener("keydown", handleKeyDown);
@@ -112,11 +110,6 @@ function updateHighScore(newScore: number) {
   }
 }
 
-const attempts = ref(parseInt(localStorage.getItem("attempts") ?? "1"));
-function increaseAttempts() {
-  attempts.value++;
-  localStorage.setItem("attempts", String(attempts.value));
-}
 
 // Listen for changes in the score
 watch(
