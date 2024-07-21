@@ -27,7 +27,21 @@ export default defineEventHandler(async (event) => {
         gameTime: parseInt(gameTime),
       },
     })
-    return newScore
+    
+    // Fetch updated leaderboard
+    const updatedLeaderboard = await prisma.leaderboard.findMany({
+      take: 10,
+      orderBy: {
+        score: 'desc',
+      },
+      select: {
+        playerName: true,
+        score: true,
+        gameTime: true,
+      },
+    })
+    
+    return { newScore, updatedLeaderboard }
   } else {
     // Handle other HTTP methods if needed
     return { message: 'Method not allowed' }

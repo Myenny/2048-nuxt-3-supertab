@@ -21,7 +21,7 @@ interface LeaderboardEntry {
 
 const leaderboard = ref<LeaderboardEntry[]>([])
 
-onMounted(async () => {
+const fetchLeaderboard = async () => {
   try {
     const response = await fetch('/api/leaderboard')
     if (response.ok) {
@@ -32,7 +32,14 @@ onMounted(async () => {
   } catch (error) {
     console.error('Error fetching leaderboard data:', error)
   }
-})
+}
+
+onMounted(fetchLeaderboard)
+
+// Listen for the custom event
+if (process.client) {
+  window.addEventListener('leaderboardUpdated', fetchLeaderboard)
+}
 
 const formatTime = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
