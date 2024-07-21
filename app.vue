@@ -22,7 +22,20 @@ useHead({
           "price": "0"
         }
       })
+    },
+    {
+      src: 'https://www.googletagmanager.com/gtag/js?id=G-G7LW7NNWR8',
+      async: true
     }
-  ]
+  ],
+  __dangerouslyDisableSanitizersByTagID: {
+    'gtag': ['innerHTML']
+  },
+  innerHTML: `
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G7LW7NNWR8');
+  `
 })
 </script>

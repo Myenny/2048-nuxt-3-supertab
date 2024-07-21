@@ -17,7 +17,28 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-      ]
+      ],
+      script: [
+        {
+          src: 'https://www.googletagmanager.com/gtag/js?id=G-G7LW7NNWR8',
+          async: true,
+        },
+        {
+          hid: 'gtag',
+          innerHTML: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-G7LW7NNWR8');
+          `,
+          type: 'text/javascript',
+          charset: 'utf-8',
+        }
+      ],
+      __dangerouslyDisableSanitizersByTagID: {
+        gtag: ['innerHTML'],
+      },
     }
-  }
+  },
+  plugins: ['~/plugins/gtag.client.ts'],
 });

@@ -12,7 +12,7 @@
             :pause="showSquareAd && !hasAccess"
             @max-moves="handleMaxMoves"
           />
-          <AdsSquare v-if="showSquareAd && !hasAccess" @close="handleAdClose" />
+          <!-- <AdsSquare v-if="showSquareAd && !hasAccess" @close="handleAdClose" /> -->
         </ClientOnly>
       </main>
       <aside class="md:w-64">
