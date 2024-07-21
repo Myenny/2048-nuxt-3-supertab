@@ -32,7 +32,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['scoreSubmitted']);
+const emit = defineEmits(['scoreSubmitted', 'leaderboardUpdated']);
 
 const { board, score } = toRefs(props);
 const playerName = ref('');
@@ -80,6 +80,7 @@ const submitScore = async () => {
     if (response.ok) {
       const { newEntry, updatedLeaderboard } = await response.json();
       emit('scoreSubmitted', updatedLeaderboard);
+      emit('leaderboardUpdated', updatedLeaderboard);
       restart();
     } else {
       console.error('Failed to submit score');
