@@ -103,20 +103,23 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { hasAccess } from "~/composables/supertab";
+import TetrisGame from '~/components/Tetris/TetrisGame.vue';
 
 const maxMoves = process.env.NODE_ENV === "development" ? 0 : 1369;
+const currentGame = ref('2048');
 
 useHead({
-  title: "Play 2048 Game Online | Free & Addictive Puzzle Game",
+  title: "Play 2048 and Tetris Online | Free & Addictive Puzzle Games",
   meta: [
     {
       name: "description",
-      content: "Enjoy the 2048 game online for free. Merge tiles to reach the 2048 tile in this fun and addictive puzzle game. Play now!"
+      content: "Enjoy 2048 and Tetris games online for free. Challenge yourself with these fun and addictive puzzle games. Play now!"
     },
     {
       name: "keywords",
-      content: "2048 game, play 2048 online, free 2048 game, addictive puzzle game, online puzzle game, merge tiles game, 2048 strategy tips"
+      content: "2048 game, Tetris game, play 2048 online, play Tetris online, free puzzle games, addictive puzzle games, online puzzle games"
     },
     {
       hid: "og-image",
