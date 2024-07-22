@@ -22,6 +22,9 @@ export default defineNuxtConfig({
       '/terms'
     ]
   },
+  buildModules: [
+    '@nuxtjs/vuex',
+  ],
   app: {
     head: {
       title: 'Play 2048 Game Online | Free & Addictive Puzzle Game',
