@@ -1,11 +1,27 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ["@nuxtjs/tailwindcss", "@vueuse/nuxt", "nuxt-svgo"],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "@vueuse/nuxt",
+    "nuxt-svgo",
+    "@nuxtjs/sitemap"
+  ],
   css: ["@/assets/css/main.css"],
   serverHandlers: [
     { route: '/api/leaderboard', handler: '~/server/api/leaderboard.ts' }
   ],
+  sitemap: {
+    hostname: 'https://your-website-url.com',
+    gzip: true,
+    exclude: [
+      '/admin/**'
+    ],
+    routes: [
+      '/',
+      '/terms'
+    ]
+  },
   app: {
     head: {
       title: 'Play 2048 Game Online | Free & Addictive Puzzle Game',

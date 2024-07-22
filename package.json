@@ -25,7 +25,8 @@
     "nuxt": "^3.10.2",
     "nuxt-svgo": "^4.0.2",
     "vue": "^3.4.19",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "@nuxtjs/sitemap": "^5.1.0"
   },
   "devDependencies": {
     "@netlify/functions": "^2.8.1",
