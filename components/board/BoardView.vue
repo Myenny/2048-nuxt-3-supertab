@@ -129,4 +129,28 @@ watch(
   }
 );
 
+const submitScore = async () => {
+  try {
+    const response = await fetch('/api/leaderboard', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        playerName: 'Player', // You might want to replace this with the actual player name
+        score: board.value.score,
+        gameTime: board.value.timer,
+      }),
+    });
+    if (response.ok) {
+      console.log('Score submitted successfully');
+      // You might want to update the leaderboard here
+    } else {
+      console.error('Failed to submit score');
+    }
+  } catch (error) {
+    console.error('Error submitting score:', error);
+  }
+};
+
 </script>
