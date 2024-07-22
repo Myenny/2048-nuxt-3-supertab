@@ -9,12 +9,11 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useStore } from 'vuex';
+import { storeToRefs } from 'pinia';
+import { useTetrisStore } from '~/store/tetris';
 
-const store = useStore();
-
-const board = computed(() => store.state.tetris.board);
+const tetrisStore = useTetrisStore();
+const { board } = storeToRefs(tetrisStore);
 
 const getCellClass = (cell) => {
   if (cell === 0) return 'bg-gray-800';

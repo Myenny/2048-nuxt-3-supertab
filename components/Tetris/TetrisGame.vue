@@ -15,40 +15,39 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex';
+import { storeToRefs } from 'pinia';
+import { useTetrisStore } from '~/store/tetris';
 import { computed, onMounted, onUnmounted } from 'vue';
 import TetrisBoard from './TetrisBoard.vue';
 import TetrisControls from './TetrisControls.vue';
 
-const store = useStore();
-
-const score = computed(() => store.state.tetris.score);
-const level = computed(() => store.state.tetris.level);
+const tetrisStore = useTetrisStore();
+const { score, level } = storeToRefs(tetrisStore);
 
 const handleKeyDown = (event) => {
   switch (event.key) {
     case 'ArrowLeft':
-      store.dispatch('tetris/moveLeft');
+      tetrisStore.moveLeft();
       break;
     case 'ArrowRight':
-      store.dispatch('tetris/moveRight');
+      tetrisStore.moveRight();
       break;
     case 'ArrowDown':
-      store.dispatch('tetris/moveDown');
+      tetrisStore.moveDown();
       break;
     case 'ArrowUp':
-      store.dispatch('tetris/rotate');
+      tetrisStore.rotate();
       break;
   }
 };
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown);
-  store.dispatch('tetris/startGame');
+  tetrisStore.startGame();
 });
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown);
-  store.dispatch('tetris/stopGame');
+  tetrisStore.stopGame();
 });
 </script>

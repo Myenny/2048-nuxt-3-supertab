@@ -18,12 +18,12 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex';
+import { useTetrisStore } from '~/store/tetris';
 
-const store = useStore();
+const tetrisStore = useTetrisStore();
 
-const moveLeft = () => store.dispatch('tetris/moveLeft');
-const moveRight = () => store.dispatch('tetris/moveRight');
-const moveDown = () => store.dispatch('tetris/moveDown');
-const rotate = () => store.dispatch('tetris/rotate');
+const moveLeft = () => tetrisStore.moveLeft();
+const moveRight = () => tetrisStore.moveRight();
+const moveDown = () => tetrisStore.moveDown();
+const rotate = () => tetrisStore.rotate();
 </script>

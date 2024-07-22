@@ -1,4 +1,4 @@
-import { createStore } from 'vuex';
+import { defineStore } from 'pinia';
 
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
@@ -15,8 +15,8 @@ const TETROMINOES = [
   [[0, 1, 1], [1, 1, 0]]
 ];
 
-export const tetrisStore = createStore({
-  state: {
+export const useTetrisStore = defineStore('tetris', {
+  state: () => ({
     board: createEmptyBoard(),
     currentPiece: null,
     currentPosition: { x: 0, y: 0 },
@@ -24,86 +24,84 @@ export const tetrisStore = createStore({
     level: 1,
     gameOver: false,
     gameInterval: null
-  },
-  mutations: {
-    setBoard(state, board) {
-      state.board = board;
-    },
-    setCurrentPiece(state, piece) {
-      state.currentPiece = piece;
-    },
-    setCurrentPosition(state, position) {
-      state.currentPosition = position;
-    },
-    setScore(state, score) {
-      state.score = score;
-    },
-    setLevel(state, level) {
-      state.level = level;
-    },
-    setGameOver(state, gameOver) {
-      state.gameOver = gameOver;
-    },
-    setGameInterval(state, interval) {
-      state.gameInterval = interval;
-    }
-  },
+  }),
   actions: {
-    startGame({ commit, dispatch }) {
-      commit('setBoard', createEmptyBoard());
-      commit('setScore', 0);
-      commit('setLevel', 1);
-      commit('setGameOver', false);
-      dispatch('spawnNewPiece');
-      const gameInterval = setInterval(() => dispatch('moveDown'), 1000);
-      commit('setGameInterval', gameInterval);
+    setBoard(board) {
+      this.board = board;
     },
-    stopGame({ state, commit }) {
-      if (state.gameInterval) {
-        clearInterval(state.gameInterval);
-        commit('setGameInterval', null);
+    setCurrentPiece(piece) {
+      this.currentPiece = piece;
+    },
+    setCurrentPosition(position) {
+      this.currentPosition = position;
+    },
+    setScore(score) {
+      this.score = score;
+    },
+    setLevel(level) {
+      this.level = level;
+    },
+    setGameOver(gameOver) {
+      this.gameOver = gameOver;
+    },
+    setGameInterval(interval) {
+      this.gameInterval = interval;
+    },
+    startGame() {
+      this.setBoard(createEmptyBoard());
+      this.setScore(0);
+      this.setLevel(1);
+      this.setGameOver(false);
+      this.spawnNewPiece();
+      const gameInterval = setInterval(() => this.moveDown(), 1000);
+      this.setGameInterval(gameInterval);
+    },
+    stopGame() {
+      if (this.gameInterval) {
+        clearInterval(this.gameInterval);
+        this.setGameInterval(null);
       }
     },
-    spawnNewPiece({ commit, state }) {
+    spawnNewPiece() {
       const newPiece = TETROMINOES[Math.floor(Math.random() * TETROMINOES.length)];
       const newPosition = { x: Math.floor(BOARD_WIDTH / 2) - Math.floor(newPiece[0].length / 2), y: 0 };
       
       if (this.isCollision(newPiece, newPosition)) {
-        commit('setGameOver', true);
+        this.setGameOver(true);
         this.stopGame();
       } else {
-        commit('setCurrentPiece', newPiece);
-        commit('setCurrentPosition', newPosition);
+        this.setCurrentPiece(newPiece);
+        this.setCurrentPosition(newPosition);
       }
     },
-    moveLeft({ state, commit }) {
-      const newPosition = { ...state.currentPosition, x: state.currentPosition.x - 1 };
-      if (!this.isCollision(state.currentPiece, newPosition)) {
-        commit('setCurrentPosition', newPosition);
+    moveLeft() {
+      const newPosition = { ...this.currentPosition, x: this.currentPosition.x - 1 };
+      if (!this.isCollision(this.currentPiece, newPosition)) {
+        this.setCurrentPosition(newPosition);
       }
     },
-    moveRight({ state, commit }) {
-      const newPosition = { ...state.currentPosition, x: state.currentPosition.x + 1 };
-      if (!this.isCollision(state.currentPiece, newPosition)) {
-        commit('setCurrentPosition', newPosition);
+    moveRight() {
+      const newPosition = { ...this.currentPosition, x: this.currentPosition.x + 1 };
+      if (!this.isCollision(this.currentPiece, newPosition)) {
+        this.setCurrentPosition(newPosition);
       }
     },
-    moveDown({ state, commit, dispatch }) {
-      const newPosition = { ...state.currentPosition, y: state.currentPosition.y + 1 };
-      if (!this.isCollision(state.currentPiece, newPosition)) {
-        commit('setCurrentPosition', newPosition);
+    moveDown() {
+      const newPosition = { ...this.currentPosition, y: this.currentPosition.y + 1 };
+      if (!this.isCollision(this.currentPiece, newPosition)) {
+        this.setCurrentPosition(newPosition);
       } else {
         this.lockPiece();
         this.clearLines();
-        dispatch('spawnNewPiece');
+        this.spawnNewPiece();
       }
     },
-    rotate({ state, commit }) {
-      const rotatedPiece = state.currentPiece[0].map((_, index) =>
-        state.currentPiece.map(row => row[index]).reverse()
+    rotate() {
+      const rotatedPiece = this.currentPiece[0].map((_, index) =>
+        this.currentPiece.map(row => row[index]).reverse()
       );
-      if (!this.isCollision(rotatedPiece, state.currentPosition)) {
-        commit('setCurrentPiece', rotatedPiece);
+      if (!this.isCollision(rotatedPiece, this.currentPosition)) {
+        this.setCurrentPiece(rotatedPiece);
       }
     },
     isCollision(piece, position) {
@@ -113,7 +111,7 @@ export const tetrisStore = createStore({
             position.x + x < 0 ||
             position.x + x >= BOARD_WIDTH ||
             position.y + y >= BOARD_HEIGHT ||
-            this.state.board[position.y + y][position.x + x]
+            this.board[position.y + y][position.x + x]
           )) {
             return true;
           }
@@ -121,20 +119,20 @@ export const tetrisStore = createStore({
       }
       return false;
     },
-    lockPiece({ state, commit }) {
-      const newBoard = state.board.map(row => [...row]);
-      state.currentPiece.forEach((row, y) => {
+    lockPiece() {
+      const newBoard = this.board.map(row => [...row]);
+      this.currentPiece.forEach((row, y) => {
         row.forEach((value, x) => {
           if (value) {
-            newBoard[state.currentPosition.y + y][state.currentPosition.x + x] = value;
+            newBoard[this.currentPosition.y + y][this.currentPosition.x + x] = value;
           }
         });
       });
-      commit('setBoard', newBoard);
+      this.setBoard(newBoard);
     },
-    clearLines({ state, commit }) {
+    clearLines() {
       let linesCleared = 0;
-      const newBoard = state.board.filter(row => {
+      const newBoard = this.board.filter(row => {
         if (row.every(cell => cell !== 0)) {
           linesCleared++;
           return false;
@@ -146,17 +144,15 @@ export const tetrisStore = createStore({
         newBoard.unshift(Array(BOARD_WIDTH).fill(0));
       }
       
-      commit('setBoard', newBoard);
-      commit('setScore', state.score + linesCleared * 100);
-      if (state.score % 1000 === 0) {
-        commit('setLevel', state.level + 1);
+      this.setBoard(newBoard);
+      this.setScore(this.score + linesCleared * 100);
+      if (this.score % 1000 === 0) {
+        this.setLevel(this.level + 1);
         // Increase game speed
-        clearInterval(state.gameInterval);
-        const newInterval = setInterval(() => this.moveDown(), 1000 - (state.level * 50));
-        commit('setGameInterval', newInterval);
+        clearInterval(this.gameInterval);
+        const newInterval = setInterval(() => this.moveDown(), 1000 - (this.level * 50));
+        this.setGameInterval(newInterval);
       }
     }
   }
 });
-
-export default tetrisStore;

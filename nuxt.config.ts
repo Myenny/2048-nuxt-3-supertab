@@ -22,8 +22,12 @@ export default defineNuxtConfig({
       '/terms'
     ]
   },
-  buildModules: [
-    '@nuxtjs/vuex',
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "@vueuse/nuxt",
+    "nuxt-svgo",
+    "@nuxtjs/sitemap",
+    "@pinia/nuxt"
   ],
   app: {
     head: {
