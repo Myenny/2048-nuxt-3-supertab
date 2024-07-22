@@ -9,7 +9,7 @@
       <BoardCell v-for="(c_item, c_i) in r_item" :key="c_i" />
     </div>
     <BoardTileView v-for="(tile, i) in tiles" :tile="tile" :key="i" />
-    <BoardGameEndOverlay :board="board" :onrestart="onRestart" />
+    <BoardGameEndOverlay :board="board" :onrestart="onRestart" :onSubmitScore="submitScore" />
   </div>
 </template>
 
@@ -129,7 +129,7 @@ watch(
   }
 );
 
-const submitScore = async () => {
+const submitScore = async (playerName: string) => {
   try {
     const response = await fetch('/api/leaderboard', {
       method: 'POST',
@@ -137,7 +137,7 @@ const submitScore = async () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        playerName: 'Player', // You might want to replace this with the actual player name
+        playerName: playerName,
         score: board.value.score,
         gameTime: board.value.timer,
       }),

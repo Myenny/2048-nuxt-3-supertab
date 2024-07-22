@@ -1,12 +1,14 @@
 <template>
   <div class="overlay" v-show="board.hasWon() || board.hasLost()">
     <p class="message">{{ contents }}</p>
+    <input v-model="playerName" placeholder="Enter your name" class="name-input" />
+    <button class="submit-score" @click="submitScore">Submit Score</button>
     <button class="tryAgain" @click="onrestart">Try again</button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps({
   board: {
@@ -17,7 +19,13 @@ const props = defineProps({
     type: Function,
     required: true,
   },
+  onSubmitScore: {
+    type: Function,
+    required: true,
+  },
 });
+
+const playerName = ref("");
 
 const contents = computed(() => {
   if (props.board.hasWon()) {
@@ -28,4 +36,32 @@ const contents = computed(() => {
     return "";
   }
 });
+
+const submitScore = () => {
+  if (playerName.value.trim()) {
+    props.onSubmitScore(playerName.value);
+  }
+};
 </script>
+
+<style scoped>
+.name-input {
+  margin: 10px 0;
+  padding: 5px;
+  font-size: 16px;
+}
+
+.submit-score {
+  margin-right: 10px;
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.submit-score:hover {
+  background-color: #45a049;
+}
+</style>
