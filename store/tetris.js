@@ -53,8 +53,19 @@ export const useTetrisStore = defineStore('tetris', {
       this.setLevel(1);
       this.setGameOver(false);
       this.spawnNewPiece();
-      const gameInterval = setInterval(() => this.moveDown(), 1000);
+      this.startGameLoop();
+    },
+    startGameLoop() {
+      if (this.gameInterval) {
+        clearInterval(this.gameInterval);
+      }
+      const gameInterval = setInterval(() => this.gameStep(), 1000 - (this.level * 50));
       this.setGameInterval(gameInterval);
+    },
+    gameStep() {
+      if (!this.gameOver) {
+        this.moveDown();
+      }
     },
     stopGame() {
       if (this.gameInterval) {
@@ -111,7 +122,7 @@ export const useTetrisStore = defineStore('tetris', {
             position.x + x < 0 ||
             position.x + x >= BOARD_WIDTH ||
             position.y + y >= BOARD_HEIGHT ||
-            this.board[position.y + y][position.x + x]
+            (this.board[position.y + y] && this.board[position.y + y][position.x + x] !== 0)
           )) {
             return true;
           }
@@ -148,10 +159,7 @@ export const useTetrisStore = defineStore('tetris', {
       this.setScore(this.score + linesCleared * 100);
       if (this.score % 1000 === 0) {
         this.setLevel(this.level + 1);
-        // Increase game speed
-        clearInterval(this.gameInterval);
-        const newInterval = setInterval(() => this.moveDown(), 1000 - (this.level * 50));
-        this.setGameInterval(newInterval);
+        this.startGameLoop(); // Restart game loop with new speed
       }
     }
   }

@@ -17,14 +17,16 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { useTetrisStore } from '~/store/tetris';
-import { computed, onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 import TetrisBoard from './TetrisBoard.vue';
 import TetrisControls from './TetrisControls.vue';
 
 const tetrisStore = useTetrisStore();
-const { score, level } = storeToRefs(tetrisStore);
+const { score, level, gameOver } = storeToRefs(tetrisStore);
 
 const handleKeyDown = (event) => {
+  if (gameOver.value) return;
+  
   switch (event.key) {
     case 'ArrowLeft':
       tetrisStore.moveLeft();
