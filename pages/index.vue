@@ -1,21 +1,34 @@
 <template>
   <div class="container mx-auto max-w-4xl space-y-4 py-4">
-    <h1 class="text-3xl font-bold mb-4">Play 2048 Game Online for Free</h1>
+    <h1 class="text-3xl font-bold mb-4">Play 2048 and Tetris Online for Free</h1>
     <aside>
       <AdsBanner1 v-if="!hasAccess" />
     </aside>
     <div class="flex flex-col md:flex-row gap-4">
       <main class="sm:py-4 relative flex-grow">
         <ClientOnly>
-          <BoardView
-            :max-moves="maxMoves"
-            :pause="showSquareAd && !hasAccess"
-            @max-moves="handleMaxMoves"
-          />
+          <div v-if="currentGame === '2048'">
+            <BoardView
+              :max-moves="maxMoves"
+              :pause="showSquareAd && !hasAccess"
+              @max-moves="handleMaxMoves"
+            />
+          </div>
+          <div v-else-if="currentGame === 'tetris'">
+            <TetrisGame />
+          </div>
           <!-- <AdsSquare v-if="showSquareAd && !hasAccess" @close="handleAdClose" /> -->
         </ClientOnly>
       </main>
       <aside class="md:w-64">
+        <div class="mb-4">
+          <button @click="currentGame = '2048'" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+            Play 2048
+          </button>
+          <button @click="currentGame = 'tetris'" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            Play Tetris
+          </button>
+        </div>
         <Leaderboard />
       </aside>
     </div>
