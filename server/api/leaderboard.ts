@@ -22,16 +22,30 @@ export default defineEventHandler(async (event) => {
     const { playerName = 'Anonymous', score, gameTime } = body
 
     // Add new score to the leaderboard
-    const newEntry = await prisma.leaderboard.create({
-      data: {
+    // Check if an entry with the same score and game time already exists
+    const existingEntry = await prisma.leaderboard.findFirst({
+      where: {
         playerName: String(playerName),
         score: Number(score),
         gameTime: Number(gameTime) || 0,
       },
     })
 
-    // Return only the new entry
-    return newEntry
+    if (!existingEntry) {
+      const newEntry = await prisma.leaderboard.create({
+        data: {
+          playerName: String(playerName),
+          score: Number(score),
+          gameTime: Number(gameTime) || 0,
+        },
+      })
+
+      // Return only the new entry
+      return newEntry
+    } else {
+      // Return the existing entry if it's a duplicate
+      return existingEntry
+    }
   } else {
     // Handle other HTTP methods if needed
     return { message: 'Method not allowed' }
