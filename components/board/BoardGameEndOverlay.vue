@@ -37,9 +37,11 @@ const contents = computed(() => {
   }
 });
 
-const submitScore = () => {
+const submitScore = async () => {
   if (playerName.value.trim()) {
-    props.onSubmitScore(playerName.value);
+    await props.onSubmitScore(playerName.value);
+    // Refresh the page after submitting the score
+    window.location.reload();
   }
 };
 </script>
