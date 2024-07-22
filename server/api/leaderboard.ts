@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
   if (event.req.method === 'GET') {
-    // Fetch the top 10 scores
+    // Fetch the top 20 scores
     const leaderboard = await prisma.leaderboard.findMany({
       take: 20,
       orderBy: {
@@ -26,24 +26,12 @@ export default defineEventHandler(async (event) => {
       data: {
         playerName: String(playerName),
         score: Number(score),
-        gameTime: Number(gameTime) || 0, // Provide a default value of 0 if gameTime is undefined
+        gameTime: Number(gameTime) || 0,
       },
     })
 
-    // Fetch the updated leaderboard
-    const updatedLeaderboard = await prisma.leaderboard.findMany({
-      take: 20,
-      orderBy: {
-        score: 'desc',
-      },
-      select: {
-        playerName: true,
-        score: true,
-        gameTime: true,
-      },
-    })
-
-    return { newEntry, updatedLeaderboard }
+    // Return only the new entry
+    return newEntry
   } else {
     // Handle other HTTP methods if needed
     return { message: 'Method not allowed' }
