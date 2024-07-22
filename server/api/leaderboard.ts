@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   if (event.req.method === 'GET') {
     // Fetch the top 10 scores
     const leaderboard = await prisma.leaderboard.findMany({
-      take: 10,
+      take: 20,
       orderBy: {
         score: 'desc',
       },
@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
 
     // Fetch the updated leaderboard
     const updatedLeaderboard = await prisma.leaderboard.findMany({
-      take: 10,
+      take: 20,
       orderBy: {
         score: 'desc',
       },
