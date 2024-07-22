@@ -45,7 +45,7 @@ const submitScore = async () => {
     // Wait a short time before reloading to ensure the submission is complete
     setTimeout(() => {
       window.location.reload();
-    }, 1000);
+    }, 100);
   }
 };
 </script>

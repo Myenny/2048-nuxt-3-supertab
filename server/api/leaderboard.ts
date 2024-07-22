@@ -19,15 +19,38 @@ export default defineEventHandler(async (event) => {
     return leaderboard
   } else if (event.req.method === 'POST') {
     const body = await readBody(event)
-    const { playerName = 'Anonymous', score, gameTime } = body
+    let { playerName, score, gameTime } = body
+
+    // Validate playerName
+    if (!playerName || playerName.trim() === '') {
+      return {
+        statusCode: 400,
+        body: {
+          message: 'playerName is required and cannot be empty',
+        },
+      }
+    }
+
+    // Ensure score and gameTime are numbers
+    score = Number(score)
+    gameTime = Number(gameTime) || 0
+
+    if (isNaN(score) || isNaN(gameTime)) {
+      return {
+        statusCode: 400,
+        body: {
+          message: 'Score and gameTime must be valid numbers',
+        },
+      }
+    }
 
     // Add new score to the leaderboard
-    // Check if an entry with the same score and game time already exists
+    // Check if an entry with the same playerName, score, and gameTime already exists
     const existingEntry = await prisma.leaderboard.findFirst({
       where: {
         playerName: String(playerName),
-        score: Number(score),
-        gameTime: Number(gameTime) || 0,
+        score: score,
+        gameTime: gameTime,
       },
     })
 
@@ -35,8 +58,8 @@ export default defineEventHandler(async (event) => {
       const newEntry = await prisma.leaderboard.create({
         data: {
           playerName: String(playerName),
-          score: Number(score),
-          gameTime: Number(gameTime) || 0,
+          score: score,
+          gameTime: gameTime,
         },
       })
 

@@ -19,7 +19,14 @@ interface LeaderboardEntry {
   gameTime: number;
 }
 
-const leaderboard = ref<LeaderboardEntry[]>([])
+const props = defineProps({
+  initialLeaderboard: {
+    type: Array as () => LeaderboardEntry[],
+    default: () => []
+  }
+})
+
+const leaderboard = ref<LeaderboardEntry[]>(props.initialLeaderboard)
 
 const fetchLeaderboard = async () => {
   try {
@@ -34,12 +41,24 @@ const fetchLeaderboard = async () => {
   }
 }
 
-onMounted(fetchLeaderboard)
+onMounted(() => {
+  if (leaderboard.value.length === 0) {
+    fetchLeaderboard()
+  }
+})
 
-// Listen for the custom event
-if (process.client) {
-  window.addEventListener('leaderboardUpdated', fetchLeaderboard)
+const updateLeaderboard = (newLeaderboard: LeaderboardEntry[]) => {
+  leaderboard.value = newLeaderboard
 }
+function defineExpose(arg0: { updateLeaderboard: (newLeaderboard: LeaderboardEntry[]) => void; }) {
+  throw new Error('Function not implemented.');
+}
+
+function defineProps(arg0: { initialLeaderboard: { type: () => LeaderboardEntry[]; default: () => never[]; }; }) {
+  throw new Error('Function not implemented.');
+}
+
+defineExpose({ updateLeaderboard })
 
 const formatTime = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
@@ -47,3 +66,4 @@ const formatTime = (seconds: number) => {
   return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 };
 </script>
+

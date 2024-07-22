@@ -190,12 +190,12 @@ Board.prototype.hasWon = function () {
   return this.won && !this.leaderboardSubmitted;
 };
 
-Board.prototype.submitLeaderboard = function () {
-  if (!this.leaderboardSubmitted) {
-    this.leaderboardSubmitted = true;
-    // Code to submit to leaderboard should be called here
-  }
-};
+// Board.prototype.submitLeaderboard = function () {
+//   if (!this.leaderboardSubmitted) {
+//     this.leaderboardSubmitted = true;
+//     // Code to submit to leaderboard should be called here
+//   }
+// };
 
 Board.deltaX = [-1, 0, 1, 0];
 Board.deltaY = [0, -1, 0, 1];
