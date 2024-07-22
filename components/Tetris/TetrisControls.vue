@@ -43,7 +43,7 @@ const startMove = (direction) => {
   };
 
   move(); // Execute immediately
-  moveInterval.value = setInterval(move, 100); // Then every 100ms
+  moveInterval.value = setInterval(move, 50); // Then every 50ms for faster movement
 };
 
 const stopMove = () => {
@@ -54,4 +54,7 @@ const stopMove = () => {
 };
 
 const rotate = () => tetrisStore.rotate();
+
+// Expose these methods to be used in the parent component
+defineExpose({ startMove, stopMove, rotate });
 </script>
