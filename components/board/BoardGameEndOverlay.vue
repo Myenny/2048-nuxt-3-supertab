@@ -2,7 +2,7 @@
   <div class="overlay" v-show="board.hasWon() || board.hasLost()">
     <p class="message">{{ contents }}</p>
     <input v-model="playerName" placeholder="Enter your name" class="name-input" />
-    <button class="submit-score" @click="submitScore">Submit Score</button>
+    <button class="submit-score" @click="submitScore" :disabled="isSubmitted">Submit Score</button>
     <button class="tryAgain" @click="onrestart">Try again</button>
   </div>
 </template>
@@ -26,6 +26,7 @@ const props = defineProps({
 });
 
 const playerName = ref("");
+const isSubmitted = ref(false);
 
 const contents = computed(() => {
   if (props.board.hasWon()) {
@@ -38,10 +39,13 @@ const contents = computed(() => {
 });
 
 const submitScore = async () => {
-  if (playerName.value.trim()) {
+  if (playerName.value.trim() && !isSubmitted.value) {
+    isSubmitted.value = true;
     await props.onSubmitScore(playerName.value);
-    // Refresh the page after submitting the score
-    window.location.reload();
+    // Wait a short time before reloading to ensure the submission is complete
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   }
 };
 </script>
