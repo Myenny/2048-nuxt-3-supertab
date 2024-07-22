@@ -29,15 +29,19 @@ const handleKeyDown = (event) => {
   
   switch (event.key) {
     case 'ArrowLeft':
+      event.preventDefault();
       tetrisStore.moveLeft();
       break;
     case 'ArrowRight':
+      event.preventDefault();
       tetrisStore.moveRight();
       break;
     case 'ArrowDown':
+      event.preventDefault();
       tetrisStore.moveDown();
       break;
     case 'ArrowUp':
+      event.preventDefault();
       tetrisStore.rotate();
       break;
   }
