@@ -5,14 +5,15 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@vueuse/nuxt",
     "nuxt-svgo",
-    "@nuxtjs/sitemap"
+    "@nuxtjs/sitemap",
+    "@pinia/nuxt"
   ],
   css: ["@/assets/css/main.css"],
   serverHandlers: [
     { route: '/api/leaderboard', handler: '~/server/api/leaderboard.ts' }
   ],
   sitemap: {
-    hostname: 'https://your-website-url.com',
+    hostname: 'https://sidequestz.pro',
     gzip: true,
     exclude: [
       '/admin/**'
@@ -22,13 +23,6 @@ export default defineNuxtConfig({
       '/terms'
     ]
   },
-  modules: [
-    "@nuxtjs/tailwindcss",
-    "@vueuse/nuxt",
-    "nuxt-svgo",
-    "@nuxtjs/sitemap",
-    "@pinia/nuxt"
-  ],
   app: {
     head: {
       title: 'Play 2048 Game Online | Free & Addictive Puzzle Game',
